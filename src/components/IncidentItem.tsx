@@ -1,19 +1,12 @@
 import React from 'react';
-import {
-  IonButton,
-  IonIcon,
-  IonItem,
-  IonItemOption,
-  IonItemOptions,
-  IonItemSliding,
-} from '@ionic/react';
+import { IonIcon, IonItem, IonItemOption, IonItemOptions, IonItemSliding } from '@ionic/react';
 import { checkmarkCircleOutline, refreshOutline, trashOutline } from 'ionicons/icons';
 import { Incident, IncidentPriority } from '../types/incident';
 
 const PRIORITY_BADGE_STYLES: Record<IncidentPriority, string> = {
-  alta: 'bg-red-100 text-red-800 border-red-200',
-  media: 'bg-amber-100 text-amber-800 border-amber-200',
-  baja: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  alta: 'bg-brut-red',
+  media: 'bg-brut-yellow',
+  baja: 'bg-brut-green',
 };
 
 export interface IncidentItemProps {
@@ -23,7 +16,7 @@ export interface IncidentItemProps {
 }
 
 /**
- * Tarjeta de incidencia.
+ * Tarjeta de incidencia (estilo brutalista: borde grueso, sombra dura, tipografía en mayúsculas).
  * - Móvil/tablet: acciones ocultas tras el gesto de deslizar (IonItemSliding).
  * - Escritorio (lg): no hay gesto táctil, así que las acciones se muestran como botones visibles.
  * El componente no modifica datos: avisa al padre con callbacks (flujo unidireccional).
@@ -32,67 +25,67 @@ const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onToggleStatus, o
   const isResolved = incident.status === 'resuelta';
 
   return (
-    <IonItemSliding className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+    // Hover: la tarjeta se levanta (solo con ratón). Sin efecto "pulsar" para no interferir con el gesto de deslizar.
+    // animate-pop: entrada al montarse (p. ej. al crear una incidencia); se desactiva con "reducir movimiento".
+    <IonItemSliding
+      className="animate-pop overflow-hidden border-[3px] border-brut-ink bg-white shadow-brut transition-[transform,box-shadow] duration-150 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brut-lg motion-reduce:animate-none motion-reduce:transition-none"
+    >
       {/* El aspecto interno de IonItem (Shadow DOM) se ajusta con variables CSS: ver .incident-item en variables.css */}
-      <IonItem className="incident-item h-full" lines="none">
+      <IonItem
+        className={`incident-item h-full ${isResolved ? 'incident-item--resolved' : ''}`}
+        lines="none"
+      >
         <article className="flex h-full w-full flex-col py-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-semibold text-blue-700">{incident.id}</span>
+              <span className="bg-brut-ink px-1.5 py-0.5 text-xs font-bold text-brut-yellow">{incident.id}</span>
               <span
-                className={`rounded-full border px-2.5 py-0.5 text-xs font-semibold capitalize ${
+                className={`border-2 border-brut-ink px-2 py-0.5 text-xs font-bold uppercase ${
                   PRIORITY_BADGE_STYLES[incident.priority]
                 }`}
               >
                 {incident.priority}
               </span>
             </div>
-            <span className="text-xs text-slate-500">{incident.createdAt}</span>
+            <span className="text-xs font-bold">{incident.createdAt}</span>
           </div>
 
           <h3
-            className={`mt-1.5 text-base font-semibold lg:text-lg ${
-              isResolved ? 'text-slate-500 line-through' : 'text-slate-900'
+            className={`mt-2 font-display text-lg uppercase leading-tight lg:text-xl ${
+              isResolved ? 'line-through decoration-4' : ''
             }`}
           >
             {incident.title}
           </h3>
-          <p className="mt-1 flex-1 text-sm text-slate-600">{incident.description}</p>
+          <p className="mt-1 flex-1 text-sm">{incident.description}</p>
 
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2">
-            <span className="text-xs font-medium text-slate-600">
-              Ubicación: <strong className="text-slate-800">{incident.location}</strong>
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t-[3px] border-brut-ink pt-3">
+            <span className="text-xs font-bold uppercase">
+              ▲ <span className="underline decoration-2 underline-offset-2">{incident.location}</span>
             </span>
 
-            <div className="flex items-center gap-1">
-              {/* Botón de estado: el área clicable mide 44px (min-h-11) aunque la píldora visible sea más pequeña */}
+            <div className="flex items-center gap-2">
+              {/* Botón de estado: 44px de alto (min-h-11) y efecto de pulsado físico */}
               <button
                 type="button"
                 onClick={() => onToggleStatus(incident.id)}
                 aria-label={`Marcar ${incident.id} como ${isResolved ? 'pendiente' : 'resuelta'}`}
-                className="group inline-flex min-h-11 items-center rounded-full px-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+                className={`brut-press-sm min-h-11 border-2 border-brut-ink px-3 text-xs font-bold uppercase ${
+                  isResolved ? 'bg-brut-green' : 'bg-brut-yellow'
+                }`}
               >
-                <span
-                  className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${
-                    isResolved
-                      ? 'bg-emerald-100 text-emerald-800 group-hover:bg-emerald-200'
-                      : 'bg-amber-100 text-amber-800 group-hover:bg-amber-200'
-                  }`}
-                >
-                  {isResolved ? 'Resuelta' : 'Pendiente'}
-                </span>
+                {isResolved ? '✓ Resuelta' : '● Pendiente'}
               </button>
 
               {/* Solo escritorio: borrar sin gesto de deslizar */}
-              <IonButton
-                fill="clear"
-                color="danger"
-                className="hidden min-h-11 lg:inline-block"
+              <button
+                type="button"
                 onClick={() => onDelete(incident.id)}
                 aria-label={`Eliminar ${incident.id}`}
+                className="brut-press-sm hidden min-h-11 min-w-11 items-center justify-center border-2 border-brut-ink bg-brut-red lg:inline-flex"
               >
-                <IonIcon slot="icon-only" icon={trashOutline} />
-              </IonButton>
+                <IonIcon icon={trashOutline} aria-hidden="true" className="text-lg" />
+              </button>
             </div>
           </div>
         </article>

@@ -1,21 +1,14 @@
 import React, { useMemo, useRef, useState } from 'react';
 import {
-  IonBadge,
-  IonButton,
-  IonButtons,
   IonContent,
   IonFab,
   IonFabButton,
   IonHeader,
   IonIcon,
-  IonLabel,
   IonList,
   IonPage,
   IonRefresher,
   IonRefresherContent,
-  IonSearchbar,
-  IonSegment,
-  IonSegmentButton,
   IonTitle,
   IonToast,
   IonToolbar,
@@ -40,11 +33,14 @@ import { FilterOption, Incident, NewIncidentData } from '../types/incident';
  * - Los hijos (KpiCard, IncidentItem, NewIncidentModal) reciben datos por props
  *   y devuelven eventos por callbacks → flujo de datos unidireccional.
  *
- * Estrategia responsive (mobile-first, breakpoints de Tailwind):
+ * Diseño: brutalismo (bordes de 3-4px, sombras duras, colores planos, tipografía enorme).
+ *
+ * Layout con vh + estrategia responsive (mobile-first, breakpoints de Tailwind):
+ *   Hero      → min-h-[38vh] / md:[32vh] / lg:[34vh]: ocupa una fracción fija de la pantalla.
  *   Mobile  (<768px)    → 1 columna, KPIs 2×2, botón flotante (FAB) para crear.
  *   Tablet  (md ≥768px) → KPIs en 1 fila de 4, tarjetas en 2 columnas.
- *   Desktop (lg ≥1024px)→ layout de 2 columnas: panel lateral fijo (KPIs + filtros + botón)
- *                         y rejilla de tarjetas; el FAB se oculta.
+ *   Desktop (lg ≥1024px)→ 2 columnas: panel lateral fijo con alto máx. calc(100vh-…)
+ *                         y listado con alto mínimo 60vh; el FAB se oculta.
  */
 const Home: React.FC = () => {
   const [incidents, setIncidents] = useState<Incident[]>(INITIAL_INCIDENTS);
@@ -70,7 +66,11 @@ const Home: React.FC = () => {
   const filteredIncidents = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
     return incidents.filter((i) => {
-      const matchesStatus = activeFilter === 'todas' || i.status === activeFilter;
+      const matchesStatus =
+        activeFilter === 'todas' ||
+        (activeFilter === 'critica'
+          ? i.status === 'pendiente' && i.priority === 'alta'
+          : i.status === activeFilter);
       const matchesQuery =
         query === '' ||
         i.title.toLowerCase().includes(query) ||
@@ -81,6 +81,10 @@ const Home: React.FC = () => {
   }, [incidents, activeFilter, searchQuery]);
 
   // ---- Manejadores de eventos (los hijos los invocan vía props) ----
+
+  /** Pulsar el KPI activo otra vez quita el filtro (comportamiento de interruptor). */
+  const handleSelectFilter = (filter: FilterOption) =>
+    setActiveFilter((current) => (current === filter ? 'todas' : filter));
 
   const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {
     setTimeout(() => {
@@ -117,29 +121,27 @@ const Home: React.FC = () => {
     setToastMessage(`Incidencia ${newIncident.id} registrada`);
   };
 
+  // Texto de la marquesina: se pinta dos veces para que la animación (translateX -50%) sea un bucle sin saltos
+  const tickerText = `${metrics.pending} PENDIENTES /// ${metrics.critical} CRÍTICAS /// ${metrics.resolved} RESUELTAS /// LABORATORIOS DAM /// `;
+
   return (
     <IonPage>
       {/* ---------- Cabecera ---------- */}
       <IonHeader className="ion-no-border">
-        <IonToolbar color="primary">
-          <IonTitle className="font-semibold tracking-tight">
-            SmartLab Monitor
-            <span className="ml-2 hidden text-sm font-normal text-blue-100 md:inline">
-              · Gestión de incidencias del centro
-            </span>
+        <IonToolbar className="brut-toolbar">
+          <IonTitle className="font-display uppercase tracking-tight">
+            SmartLab<span className="text-white">//</span>Monitor
           </IonTitle>
-          <IonButtons slot="end">
-            <div className="mr-3 flex items-center gap-2" aria-live="polite">
-              <span className="hidden text-xs font-medium text-blue-50 sm:inline">Pendientes:</span>
-              <IonBadge color="light" className="px-2.5 py-1 font-bold text-blue-800">
-                {metrics.pending}
-              </IonBadge>
-            </div>
-          </IonButtons>
+          <div slot="end" className="mr-4 flex items-center gap-2" aria-live="polite">
+            <span className="hidden text-xs font-bold uppercase text-white sm:inline">Pendientes</span>
+            <span className="border-2 border-brut-yellow px-2 py-0.5 font-display text-brut-yellow">
+              {metrics.pending}
+            </span>
+          </div>
         </IonToolbar>
       </IonHeader>
 
-      <IonContent fullscreen>
+      <IonContent fullscreen className="brut-bg">
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent
             pullingText="Desliza para actualizar"
@@ -148,109 +150,131 @@ const Home: React.FC = () => {
           />
         </IonRefresher>
 
-        {/* Contenedor centrado: el ancho máximo evita líneas larguísimas en monitores grandes */}
-        <div className="mx-auto w-full max-w-7xl px-4 pb-28 pt-5 sm:px-6 lg:px-8 lg:pb-12">
-          {/* ---------- Intro + indicador de breakpoint ---------- */}
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 sm:text-2xl lg:text-3xl">
-                Panel de incidencias
-              </h1>
-              <p className="mt-1 text-sm text-slate-600 lg:text-base">
-                Laboratorios y aulas del ciclo DAM · actualizado en tiempo real
-              </p>
-            </div>
-            {/* Muestra qué layout está activo: útil para comprobar el RWD en la defensa */}
-            <span className="rounded-full bg-slate-800 px-3 py-1 text-xs font-semibold text-white">
+        {/* ---------- Hero: alto relativo a la ventana (vh) ---------- */}
+        <section
+          aria-labelledby="page-title"
+          className="flex min-h-[38vh] flex-col justify-end border-b-4 border-brut-ink bg-brut-yellow md:min-h-[32vh] lg:min-h-[34vh]"
+        >
+          <div className="mx-auto w-full max-w-7xl px-4 pb-6 pt-8 sm:px-6 lg:px-8">
+            {/* Pegatina que indica el layout activo: útil para comprobar el RWD en la defensa */}
+            <span className="mb-4 inline-block -rotate-2 border-[3px] border-brut-ink bg-white px-3 py-1 text-xs font-bold uppercase shadow-brut-sm transition-transform duration-150 hover:rotate-0">
               <span className="md:hidden">Vista Mobile</span>
               <span className="hidden md:inline lg:hidden">Vista Tablet</span>
               <span className="hidden lg:inline">Vista Desktop</span>
             </span>
+            <h1
+              id="page-title"
+              className="font-display text-[2.6rem] uppercase leading-[0.9] tracking-tight sm:text-6xl lg:text-8xl"
+            >
+              Panel de
+              <br />
+              incidencias<span className="text-brut-red">.</span>
+            </h1>
+            <p className="mt-4 max-w-xl text-sm font-bold md:text-base">
+              Laboratorios y aulas del ciclo DAM · actualizado en tiempo real
+            </p>
           </div>
+        </section>
 
+        {/* ---------- Marquesina: se para al pasar el ratón y con "reducir movimiento" ---------- */}
+        <div
+          className="group overflow-hidden border-b-4 border-brut-ink bg-brut-ink py-2 text-brut-yellow"
+          aria-hidden="true"
+        >
+          <div className="flex w-max animate-marquee whitespace-nowrap text-sm font-bold group-hover:[animation-play-state:paused] motion-reduce:animate-none">
+            <span className="pr-4">{tickerText.repeat(3)}</span>
+            <span className="pr-4">{tickerText.repeat(3)}</span>
+          </div>
+        </div>
+
+        <div className="mx-auto w-full max-w-7xl px-4 pb-28 pt-8 sm:px-6 lg:px-8 lg:pb-12">
           {/* ---------- Layout principal: 1 columna → 2 columnas en lg ---------- */}
-          <div className="lg:grid lg:grid-cols-[360px_minmax(0,1fr)] lg:items-start lg:gap-8">
-            {/* Panel lateral (en móvil/tablet queda arriba, en escritorio a la izquierda y fijo) */}
-            <aside className="space-y-6 lg:sticky lg:top-4">
+          <div className="lg:grid lg:grid-cols-[360px_minmax(0,1fr)] lg:items-start lg:gap-10">
+            {/* Panel lateral: en escritorio queda fijo y su alto máximo depende de la ventana (vh) */}
+            <aside className="space-y-6 lg:sticky lg:top-6 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto lg:p-2">
               <section aria-labelledby="kpi-title">
-                <h2
-                  id="kpi-title"
-                  className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-600"
-                >
-                  Estado operativo
+                <h2 id="kpi-title" className="mb-3 text-xs font-bold uppercase tracking-widest">
+                  ■ Estado operativo · pulsa para filtrar
                 </h2>
-                <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-2">
-                  <KpiCard label="Total" value={metrics.total} icon={layersOutline} tone="neutral" />
-                  <KpiCard label="Pendientes" value={metrics.pending} icon={timeOutline} tone="warning" />
-                  <KpiCard label="Críticas" value={metrics.critical} icon={alertCircleOutline} tone="danger" />
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-2">
+                  <KpiCard
+                    label="Total"
+                    value={metrics.total}
+                    icon={layersOutline}
+                    tone="neutral"
+                    active={activeFilter === 'todas'}
+                    onSelect={() => setActiveFilter('todas')}
+                  />
+                  <KpiCard
+                    label="Pendientes"
+                    value={metrics.pending}
+                    icon={timeOutline}
+                    tone="warning"
+                    active={activeFilter === 'pendiente'}
+                    onSelect={() => handleSelectFilter('pendiente')}
+                  />
+                  <KpiCard
+                    label="Críticas"
+                    value={metrics.critical}
+                    icon={alertCircleOutline}
+                    tone="danger"
+                    active={activeFilter === 'critica'}
+                    onSelect={() => handleSelectFilter('critica')}
+                  />
                   <KpiCard
                     label="Resueltas"
                     value={metrics.resolved}
                     icon={checkmarkCircleOutline}
                     tone="success"
+                    active={activeFilter === 'resuelta'}
+                    onSelect={() => handleSelectFilter('resuelta')}
                   />
                 </div>
               </section>
 
-              <section aria-label="Filtros de búsqueda" className="space-y-3">
-                <IonSearchbar
+              {/* Buscador nativo: con Tailwind se controla el borde, la sombra y el foco (IonSearchbar los encapsula) */}
+              <label className="block">
+                <span className="mb-2 block text-xs font-bold uppercase tracking-widest">■ Buscar</span>
+                <input
+                  type="search"
                   value={searchQuery}
-                  onIonInput={(e) => setSearchQuery(e.detail.value ?? '')}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Código, título o aula"
-                  debounce={200}
-                  className="px-0"
-                  aria-label="Buscar incidencias"
+                  className="w-full border-[3px] border-brut-ink bg-white px-3 py-3 text-base font-bold shadow-brut-sm outline-none transition-[transform,box-shadow,background-color] duration-150 placeholder:font-normal placeholder:text-neutral-600 focus:-translate-x-0.5 focus:-translate-y-0.5 focus:bg-brut-yellow focus:shadow-brut motion-reduce:transition-none"
                 />
-                <IonSegment
-                  value={activeFilter}
-                  onIonChange={(e) => setActiveFilter((e.detail.value as FilterOption) ?? 'todas')}
-                  className="rounded-lg bg-white"
-                >
-                  {/* IonLabel está en el Light DOM: aquí Tailwind sí aplica (normal-case quita las mayúsculas de Material).
-                      Sin contadores: ya los muestran las KPI y así el texto cabe en 360px */}
-                  <IonSegmentButton value="todas">
-                    <IonLabel className="normal-case">Todas</IonLabel>
-                  </IonSegmentButton>
-                  <IonSegmentButton value="pendiente">
-                    <IonLabel className="normal-case">Pendientes</IonLabel>
-                  </IonSegmentButton>
-                  <IonSegmentButton value="resuelta">
-                    <IonLabel className="normal-case">Resueltas</IonLabel>
-                  </IonSegmentButton>
-                </IonSegment>
-              </section>
+              </label>
 
               {/* En escritorio no hay FAB: botón visible en el panel */}
-              <IonButton
-                expand="block"
-                className="hidden font-semibold lg:block"
+              <button
+                type="button"
                 onClick={() => setIsModalOpen(true)}
+                className="brut-press hidden w-full items-center justify-center gap-2 border-[3px] border-brut-ink bg-brut-red py-4 font-display text-lg uppercase lg:flex"
               >
-                <IonIcon slot="start" icon={addOutline} />
+                <IonIcon icon={addOutline} aria-hidden="true" className="text-2xl" />
                 Nueva incidencia
-              </IonButton>
+              </button>
             </aside>
 
-            {/* ---------- Listado ---------- */}
-            <section aria-labelledby="list-title" className="mt-6 lg:mt-0">
-              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-                <h2 id="list-title" className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                  Incidencias registradas ({filteredIncidents.length})
+            {/* ---------- Listado: alto mínimo en vh para que el layout no "salte" al filtrar ---------- */}
+            <section aria-labelledby="list-title" className="mt-10 lg:mt-0 lg:min-h-[60vh]">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                <h2 id="list-title" className="font-display text-2xl uppercase lg:text-3xl">
+                  Incidencias <span className="bg-brut-ink px-2 text-brut-yellow">{filteredIncidents.length}</span>
                 </h2>
-                <span className="text-xs text-slate-500 lg:hidden">Desliza una tarjeta para ver acciones</span>
+                <span className="border-2 border-brut-ink bg-white px-2 py-0.5 text-xs font-bold uppercase lg:hidden">
+                  ← Desliza una tarjeta
+                </span>
               </div>
 
               {filteredIncidents.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center">
-                  <p className="text-sm font-medium text-slate-600">
-                    No hay incidencias que coincidan con el filtro aplicado.
-                  </p>
+                <div className="flex min-h-[30vh] items-center justify-center border-[3px] border-dashed border-brut-ink bg-white p-8 text-center">
+                  <p className="font-display text-xl uppercase">Nada por aquí. Cambia el filtro.</p>
                 </div>
               ) : (
                 <IonList
                   ref={listRef}
                   lines="none"
-                  className="grid gap-3 bg-transparent p-0 md:grid-cols-2 lg:gap-4"
+                  className="grid gap-5 bg-transparent p-2 md:grid-cols-2 lg:gap-6"
                 >
                   {filteredIncidents.map((incident) => (
                     <IncidentItem
@@ -267,8 +291,12 @@ const Home: React.FC = () => {
         </div>
 
         {/* Botón flotante: solo móvil y tablet */}
-        <IonFab slot="fixed" vertical="bottom" horizontal="end" className="mb-3 mr-3 lg:hidden">
-          <IonFabButton onClick={() => setIsModalOpen(true)} aria-label="Registrar nueva incidencia">
+        <IonFab slot="fixed" vertical="bottom" horizontal="end" className="mb-4 mr-4 lg:hidden">
+          <IonFabButton
+            className="brut-fab"
+            onClick={() => setIsModalOpen(true)}
+            aria-label="Registrar nueva incidencia"
+          >
             <IonIcon icon={addOutline} />
           </IonFabButton>
         </IonFab>
@@ -281,6 +309,7 @@ const Home: React.FC = () => {
         />
 
         <IonToast
+          className="brut-toast"
           isOpen={toastMessage !== null}
           message={toastMessage ?? ''}
           duration={2200}

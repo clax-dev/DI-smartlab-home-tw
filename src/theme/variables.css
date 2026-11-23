@@ -3,32 +3,67 @@
 @tailwind utilities;
 
 :root {
-  --ion-color-primary: #2563eb;
-  --ion-color-primary-rgb: 37, 99, 235;
-  --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #2157cf;
-  --ion-color-primary-tint: #3b73ed;
+  /* Tokens Ionic alineados con la paleta brutalista */
+  --ion-color-primary: #000000;
+  --ion-color-primary-rgb: 0, 0, 0;
+  --ion-color-primary-contrast: #ffe14d;
+  --ion-color-primary-contrast-rgb: 255, 225, 77;
+  --ion-color-primary-shade: #000000;
+  --ion-color-primary-tint: #1a1a1a;
 
-  --ion-background-color: #f8fafc;
-  --ion-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --ion-background-color: #f4f1ea;
+  --ion-text-color: #000000;
+  --ion-font-family: 'Space Mono', Consolas, monospace;
+}
+
+/*
+ * Interacciones reutilizables (DRY con @apply).
+ * Efecto "botón físico": en reposo tiene sombra dura; al pasar el ratón se levanta
+ * (la sombra crece) y al pulsar se hunde hasta ocupar el sitio de la sombra.
+ */
+@layer components {
+  .brut-press {
+    @apply shadow-brut transition-[transform,box-shadow] duration-150 ease-out
+      hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brut-lg
+      active:translate-x-[6px] active:translate-y-[6px] active:shadow-none
+      focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brut-blue
+      motion-reduce:transition-none;
+  }
+  .brut-press-sm {
+    @apply shadow-brut-sm transition-[transform,box-shadow] duration-100 ease-out
+      hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-brut
+      active:translate-x-[3px] active:translate-y-[3px] active:shadow-none
+      focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brut-blue
+      motion-reduce:transition-none;
+  }
 }
 
 /*
  * Shadow DOM: Tailwind no entra dentro de los componentes Ionic.
  * Su interior se personaliza con las CSS Custom Properties que Ionic expone.
  */
+
+/* Fondo de "papel" con retícula de puntos */
+ion-content.brut-bg {
+  --background: #f4f1ea radial-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1px) 0 0 / 18px 18px;
+}
+
+.brut-toolbar {
+  --background: #000000;
+  --color: #ffe14d;
+  --border-width: 0;
+  --min-height: 60px;
+}
+
 .incident-item {
   --padding-start: 16px;
   --inner-padding-end: 16px;
   --background: #ffffff;
+  --border-radius: 0;
 }
-
-/* Menos relleno interno en los botones del filtro para que "Pendientes" quepa en 360px */
-ion-segment-button {
-  --padding-start: 4px;
-  --padding-end: 4px;
-  min-width: 0;
+/* Resuelta: trama rayada, típica del brutalismo, en lugar de un gris suave */
+.incident-item--resolved {
+  --background: repeating-linear-gradient(-45deg, #ffffff 0 10px, #eeeeee 10px 20px);
 }
 
 /* La tarjeta deslizable ocupa toda la celda del grid para que todas midan lo mismo */
@@ -37,12 +72,42 @@ ion-item-sliding {
   height: 100%;
 }
 
-/* Modal: pantalla completa en móvil; ventana centrada en tablet/escritorio */
+.brut-fab {
+  --background: #ffe14d;
+  --background-activated: #000000;
+  --background-hover: #ffd000;
+  --color: #000000;
+  --border-radius: 0;
+  --border-width: 3px;
+  --border-style: solid;
+  --border-color: #000000;
+  --box-shadow: 6px 6px 0 0 #000000;
+}
+
+.brut-field {
+  --background: #ffffff;
+  --border-radius: 0;
+  --highlight-color-focused: #000000;
+}
+
+.brut-toast {
+  --background: #000000;
+  --color: #ffe14d;
+  --border-radius: 0;
+  --box-shadow: 6px 6px 0 0 #ff5c5c;
+  font-weight: 700;
+}
+
+/* Modal: pantalla completa en móvil; ventana centrada en tablet/escritorio, alto en vh */
 @media (min-width: 768px) {
   .incident-modal {
     --width: 640px;
     /* IonContent no tiene altura propia: con "auto" el modal colapsa, por eso altura explícita */
-    --height: min(520px, 90vh);
-    --border-radius: 16px;
+    --height: min(500px, 85vh);
+    --border-radius: 0;
+    --box-shadow: 12px 12px 0 0 #000000;
+  }
+  .incident-modal::part(content) {
+    border: 4px solid #000000;
   }
 }

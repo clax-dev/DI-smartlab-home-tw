@@ -61,8 +61,8 @@ const NewIncidentModal: React.FC<NewIncidentModalProps> = ({ isOpen, onClose, on
   return (
     <IonModal isOpen={isOpen} onDidDismiss={onClose} className="incident-modal">
       <IonHeader>
-        <IonToolbar>
-          <IonTitle>Nueva incidencia</IonTitle>
+        <IonToolbar className="brut-toolbar">
+          <IonTitle className="font-display uppercase">Nueva incidencia</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={onClose} aria-label="Cerrar formulario">
               <IonIcon slot="icon-only" icon={closeOutline} />
@@ -71,9 +71,9 @@ const NewIncidentModal: React.FC<NewIncidentModalProps> = ({ isOpen, onClose, on
         </IonToolbar>
       </IonHeader>
 
-      <IonContent className="ion-padding">
+      <IonContent className="ion-padding brut-bg">
         <form onSubmit={handleSubmit} className="mx-auto max-w-xl space-y-4">
-          <IonItem className="rounded-lg border border-slate-200" lines="none">
+          <IonItem className="brut-field border-[3px] border-brut-ink" lines="none">
             <IonInput
               label="Título de la incidencia *"
               labelPlacement="stacked"
@@ -86,7 +86,7 @@ const NewIncidentModal: React.FC<NewIncidentModalProps> = ({ isOpen, onClose, on
 
           {/* En tablet/escritorio ubicación y prioridad van en dos columnas */}
           <div className="grid gap-4 sm:grid-cols-2">
-            <IonItem className="rounded-lg border border-slate-200" lines="none">
+            <IonItem className="brut-field border-[3px] border-brut-ink" lines="none">
               <IonInput
                 label="Aula o ubicación *"
                 labelPlacement="stacked"
@@ -96,7 +96,7 @@ const NewIncidentModal: React.FC<NewIncidentModalProps> = ({ isOpen, onClose, on
                 required
               />
             </IonItem>
-            <IonItem className="rounded-lg border border-slate-200" lines="none">
+            <IonItem className="brut-field border-[3px] border-brut-ink" lines="none">
               <IonSelect
                 label="Prioridad"
                 labelPlacement="stacked"
@@ -110,7 +110,7 @@ const NewIncidentModal: React.FC<NewIncidentModalProps> = ({ isOpen, onClose, on
             </IonItem>
           </div>
 
-          <IonItem className="rounded-lg border border-slate-200" lines="none">
+          <IonItem className="brut-field border-[3px] border-brut-ink" lines="none">
             <IonTextarea
               label="Descripción técnica"
               labelPlacement="stacked"
@@ -121,9 +121,13 @@ const NewIncidentModal: React.FC<NewIncidentModalProps> = ({ isOpen, onClose, on
             />
           </IonItem>
 
-          <IonButton expand="block" type="submit" className="pt-2 font-semibold">
-            Guardar incidencia
-          </IonButton>
+          {/* Botón nativo: con Tailwind se controla todo su aspecto (IonButton lo esconde en su Shadow DOM) */}
+          <button
+            type="submit"
+            className="brut-press w-full border-[3px] border-brut-ink bg-brut-yellow py-4 font-display text-lg uppercase"
+          >
+            Guardar incidencia →
+          </button>
         </form>
       </IonContent>
     </IonModal>

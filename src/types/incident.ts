@@ -1,6 +1,7 @@
 export type IncidentPriority = 'alta' | 'media' | 'baja';
 export type IncidentStatus = 'pendiente' | 'resuelta';
-export type FilterOption = 'todas' | 'pendiente' | 'resuelta';
+/** 'critica' = pendiente y de prioridad alta. */
+export type FilterOption = 'todas' | 'pendiente' | 'resuelta' | 'critica';
 
 export interface Incident {
   id: string;
