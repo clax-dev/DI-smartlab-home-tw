@@ -5,7 +5,7 @@ Enunciado: *crear un proyecto nuevo en React con un componente Home, aplicarle T
 
 - **Stack:** React 18 + TypeScript, Ionic React 8 (componentes móviles), Tailwind CSS 3.4, y Vite 5 como bundler.
 - **Base:** la guía técnica del profesor (`Guia_React_TailWind.pdf`, proyecto *SmartLab Incident Manager*), ampliada con un layout RWD de tres niveles y con el Home dividido en componentes.
-- **Producción:** `URL_VERCEL` *(se rellena tras el despliegue)*.
+- **Producción:** <https://smartlab-home-tw.vercel.app>.
 
 ---
 
