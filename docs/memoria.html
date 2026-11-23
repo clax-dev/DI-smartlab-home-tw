@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Memoria · SmartLab Home RWD</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; color: #0f172a; font-size: 10.5pt; line-height: 1.45; margin: 0; }
+  h1 { font-size: 22pt; margin: 0 0 4px; color: #1d4ed8; }
+  h2 { font-size: 13pt; margin: 18px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #dbeafe; color: #1e3a8a; }
+  h3 { font-size: 11pt; margin: 10px 0 4px; }
+  p { margin: 4px 0 8px; }
+  code { font-family: Consolas, monospace; font-size: 9pt; background: #f1f5f9; padding: 1px 4px; border-radius: 3px; }
+  pre { font-family: Consolas, monospace; font-size: 8.5pt; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; margin: 6px 0; white-space: pre; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 9.5pt; }
+  th, td { border: 1px solid #cbd5e1; padding: 5px 7px; text-align: left; vertical-align: top; }
+  th { background: #eff6ff; }
+  .meta { color: #475569; margin-bottom: 14px; }
+  .box { border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
+  .links td:first-child { width: 28%; font-weight: 600; }
+  .shots { display: flex; gap: 10px; align-items: flex-start; justify-content: center; }
+  .shots figure { margin: 0; text-align: center; }
+  .shots img { border: 1px solid #cbd5e1; border-radius: 6px; display: block; }
+  figcaption { font-size: 8.5pt; color: #475569; margin-top: 3px; }
+  .page-break { break-before: page; }
+  ul { margin: 4px 0 8px; padding-left: 18px; }
+  li { margin: 2px 0; }
+</style>
+</head>
+<body>
+
+<h1>SmartLab Monitor: Home responsive</h1>
+<div class="meta">
+  Desarrollo de Interfaces (0488) · 2.º DAM · Práctica: <strong>Proyecto React + componente Home + Tailwind CSS + RWD + despliegue en Vercel</strong>
+</div>
+
+<table class="links">
+  <tr><td>Despliegue (Vercel)</td><td><code>URL_VERCEL</code></td></tr>
+  <tr><td>Repositorio</td><td><code>https://github.com/clax-dev/DI-smartlab-home-tw</code></td></tr>
+  <tr><td>Stack</td><td>React 18 · TypeScript · Ionic React 8 · Tailwind CSS 3.4 · Vite 5</td></tr>
+</table>
+
+<h2>1. Objetivo</h2>
+<p>Crear un proyecto nuevo en React cuya pantalla principal (<code>Home</code>) esté maquetada con clases utilitarias de Tailwind CSS. El Home debe adaptarse a tres tipos de dispositivo (móvil, tablet y escritorio) y publicarse en Vercel. Se parte de la guía técnica de la asignatura (<em>SmartLab Incident Manager</em>), que ya plantea Ionic React + Tailwind sobre Vite. A esa base se añade un diseño responsive de tres niveles y se divide el Home en componentes.</p>
+
+<h2>2. Arquitectura y flujo de datos</h2>
+<pre>main.tsx ─► App.tsx (IonApp + router: "/" → "/home")
+              └─► pages/Home.tsx  ← dueño del estado: lista, búsqueda, filtro, modal, toast
+                    ├─ KpiCard           props: label, value, icon, tone
+                    ├─ IncidentItem      props: incident  · callbacks: onToggleStatus, onDelete
+                    └─ NewIncidentModal  estado local del formulario · callback: onCreate</pre>
+<p><strong>Flujo unidireccional:</strong> los datos bajan a los hijos como <em>props</em> y los eventos suben como <em>callbacks</em>. Solo <code>Home</code> modifica la lista. Las métricas y el listado filtrado se calculan a partir del estado con <code>useMemo</code>, así que no se guardan duplicados.</p>
+<table>
+  <tr><th>Decisión</th><th>Motivo</th><th>Alternativa descartada</th></tr>
+  <tr><td>Ionic React + Tailwind</td><td>Es el stack de la guía. Ionic aporta los controles móviles (deslizar, FAB, modal) y Tailwind el layout responsive.</td><td>React + Vite sin Ionic: más simple, pero habría que programar a mano los gestos táctiles.</td></tr>
+  <tr><td>Home dividido en 3 componentes</td><td>Cada pieza tiene una sola responsabilidad. Cambiar el diseño de la tarjeta solo afecta a <code>IncidentItem</code>.</td><td>Un único <code>Home.tsx</code> de 450 líneas, como en la guía.</td></tr>
+  <tr><td>Estado del formulario dentro del modal</td><td>El tecleo no vuelve a pintar todo el Home, y el padre solo recibe datos ya validados.</td><td>Mantener los 4 <code>useState</code> del formulario en Home.</td></tr>
+  <tr><td>Personalización del Shadow DOM mediante variables CSS</td><td>Las clases de Tailwind no penetran en el Shadow DOM de Ionic.</td><td>Usar <code>className="--padding-start:16px"</code> como en la guía: no es una clase válida y el navegador lo ignora.</td></tr>
+</table>
+
+<h2>3. Estrategia responsive (mobile-first)</h2>
+<p>Las clases de Tailwind sin prefijo definen el diseño móvil. Los prefijos <code>md:</code> (≥ 768 px) y <code>lg:</code> (≥ 1024 px) añaden cambios para pantallas más anchas. La etiqueta «Vista Mobile / Tablet / Desktop» del Home muestra qué layout está activo.</p>
+<table>
+  <tr><th>Vista</th><th>Ancho</th><th>Cambios de layout</th><th>Clases clave</th></tr>
+  <tr><td><strong>Mobile</strong></td><td>&lt; 768 px</td><td>1 columna · KPIs 2×2 · botón flotante · acciones con gesto de deslizar · modal a pantalla completa</td><td><code>grid-cols-2</code>, <code>IonFab</code></td></tr>
+  <tr><td><strong>Tablet</strong></td><td>768–1023 px</td><td>KPIs en una fila de 4 · tarjetas en 2 columnas · subtítulo en la cabecera · modal centrado de 640 px</td><td><code>md:grid-cols-4</code>, <code>md:grid-cols-2</code>, <code>md:inline</code></td></tr>
+  <tr><td><strong>Desktop</strong></td><td>≥ 1024 px</td><td>Panel lateral fijo de 360 px + rejilla de tarjetas · sin FAB (botón en el panel) · botón de borrar visible, porque con ratón no hay gesto de deslizar</td><td><code>lg:grid-cols-[360px_1fr]</code>, <code>lg:sticky</code>, <code>lg:hidden</code></td></tr>
+</table>
+<div class="box"><strong>Verificación:</strong> se emularon dispositivos con Playwright + Chrome a 360×800, 820×1180 y 1280×800. En los tres tamaños el ancho del contenido coincide con el de la ventana (<code>scrollWidth = clientWidth</code>), por lo que no hay scroll horizontal. Las áreas táctiles miden al menos 44 px y los botones de solo icono llevan <code>aria-label</code>.</div>
+
+<h2>4. Despliegue en Vercel</h2>
+<ul>
+  <li><code>vercel.json</code> declara el framework <em>Vite</em>, el comando <code>npm run build</code> y la carpeta <code>dist</code>.</li>
+  <li>La regla <em>rewrite</em> <code>/(.*) → /index.html</code> hace que recargar <code>/home</code> no dé un 404. La ruta la resuelve React en el navegador (es una SPA) y no existe como fichero en el servidor.</li>
+  <li>Al importar el repo de GitHub en Vercel, cada <code>git push</code> a <code>main</code> vuelve a desplegar la app automáticamente.</li>
+</ul>
+
+<h2>5. Ejecución local</h2>
+<pre>npm install
+npm run dev       # http://localhost:5173
+npm run build     # build de producción en dist/ (lo mismo que ejecuta Vercel)</pre>
+
+<div class="page-break"></div>
+<h2>6. Capturas</h2>
+<div class="shots">
+  <figure><img src="capturas/mobile.png" style="width:150px"><figcaption>Mobile · 360×800</figcaption></figure>
+  <figure><img src="capturas/tablet.png" style="width:205px"><figcaption>Tablet · 820×1180</figcaption></figure>
+  <figure><img src="capturas/mobile-modal.png" style="width:150px"><figcaption>Modal en móvil</figcaption></figure>
+</div>
+<div class="shots" style="margin-top:12px">
+  <figure><img src="capturas/desktop.png" style="width:600px"><figcaption>Desktop · 1280×800: panel lateral + rejilla de tarjetas</figcaption></figure>
+</div>
+
+</body>
+</html>

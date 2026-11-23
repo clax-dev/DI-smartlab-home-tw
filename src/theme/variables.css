@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ion-color-primary: #2563eb;
+  --ion-color-primary-rgb: 37, 99, 235;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #2157cf;
+  --ion-color-primary-tint: #3b73ed;
+
+  --ion-background-color: #f8fafc;
+  --ion-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/*
+ * Shadow DOM: Tailwind no entra dentro de los componentes Ionic.
+ * Su interior se personaliza con las CSS Custom Properties que Ionic expone.
+ */
+.incident-item {
+  --padding-start: 16px;
+  --inner-padding-end: 16px;
+  --background: #ffffff;
+}
+
+/* Menos relleno interno en los botones del filtro para que "Pendientes" quepa en 360px */
+ion-segment-button {
+  --padding-start: 4px;
+  --padding-end: 4px;
+  min-width: 0;
+}
+
+/* La tarjeta deslizable ocupa toda la celda del grid para que todas midan lo mismo */
+ion-item-sliding {
+  display: block;
+  height: 100%;
+}
+
+/* Modal: pantalla completa en móvil; ventana centrada en tablet/escritorio */
+@media (min-width: 768px) {
+  .incident-modal {
+    --width: 640px;
+    /* IonContent no tiene altura propia: con "auto" el modal colapsa, por eso altura explícita */
+    --height: min(520px, 90vh);
+    --border-radius: 16px;
+  }
+}
