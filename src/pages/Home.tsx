@@ -13,6 +13,7 @@ import {
   IonToast,
   IonToolbar,
   RefresherEventDetail,
+  useIonRouter,
 } from '@ionic/react';
 import {
   addOutline,
@@ -24,12 +25,13 @@ import {
 import KpiCard from '../components/KpiCard';
 import IncidentItem from '../components/IncidentItem';
 import NewIncidentModal from '../components/NewIncidentModal';
-import { INITIAL_INCIDENTS } from '../data/initialIncidents';
-import { FilterOption, Incident, NewIncidentData } from '../types/incident';
+import { useIncidentsStorage } from '../hooks/useIncidentsStorage';
+import { FilterOption, NewIncidentData } from '../types/incident';
 
 /**
  * Home: componente "contenedor".
- * - Es el dueño del estado (lista, búsqueda, filtro, modal, toast).
+ * - La lista de incidencias vive en useIncidentsStorage (localStorage, compartida con la ficha de detalle).
+ *   Home es dueño del estado de la vista: búsqueda, filtro, modal y toast.
  * - Los hijos (KpiCard, IncidentItem, NewIncidentModal) reciben datos por props
  *   y devuelven eventos por callbacks → flujo de datos unidireccional.
  *
@@ -43,7 +45,8 @@ import { FilterOption, Incident, NewIncidentData } from '../types/incident';
  *                         y listado con alto mínimo 60vh; el FAB se oculta.
  */
 const Home: React.FC = () => {
-  const [incidents, setIncidents] = useState<Incident[]>(INITIAL_INCIDENTS);
+  const { incidents, addIncident, toggleStatus, deleteIncident } = useIncidentsStorage();
+  const router = useIonRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterOption>('todas');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -93,32 +96,29 @@ const Home: React.FC = () => {
     }, 700);
   };
 
+  // Las acciones modifican el almacén (que persiste en localStorage); Home solo coordina la UI
   const handleToggleStatus = async (id: string) => {
-    setIncidents((prev) =>
-      prev.map((i) =>
-        i.id === id ? { ...i, status: i.status === 'pendiente' ? 'resuelta' : 'pendiente' } : i
-      )
-    );
+    toggleStatus(id);
     await listRef.current?.closeSlidingItems();
     setToastMessage(`Estado de ${id} actualizado`);
   };
 
   const handleDelete = async (id: string) => {
-    setIncidents((prev) => prev.filter((i) => i.id !== id));
+    deleteIncident(id);
     await listRef.current?.closeSlidingItems();
     setToastMessage(`Incidencia ${id} eliminada`);
   };
 
   const handleCreate = (data: NewIncidentData) => {
-    const newIncident: Incident = {
-      ...data,
-      id: `INC-${Math.floor(106 + Math.random() * 893)}`,
-      status: 'pendiente',
-      createdAt: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
-    };
-    setIncidents((prev) => [newIncident, ...prev]);
+    const created = addIncident(data);
     setIsModalOpen(false);
-    setToastMessage(`Incidencia ${newIncident.id} registrada`);
+    setToastMessage(`Incidencia ${created.id} registrada`);
+  };
+
+  /** Navega a la ficha técnica (Mejora 3): la ruta /incident/:id la resuelve IonRouterOutlet. */
+  const handleOpenDetail = async (id: string) => {
+    await listRef.current?.closeSlidingItems();
+    router.push(`/incident/${id}`, 'forward');
   };
 
   // Texto de la marquesina: se pinta dos veces para que la animación (translateX -50%) sea un bucle sin saltos
@@ -282,6 +282,7 @@ const Home: React.FC = () => {
                       incident={incident}
                       onToggleStatus={handleToggleStatus}
                       onDelete={handleDelete}
+                      onOpenDetail={handleOpenDetail}
                     />
                   ))}
                 </IonList>
