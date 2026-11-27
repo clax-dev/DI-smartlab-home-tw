@@ -13,6 +13,8 @@ export interface IncidentItemProps {
   incident: Incident;
   onToggleStatus: (id: string) => void;
   onDelete: (id: string) => void;
+  /** Abre la ficha técnica /incident/:id (el padre decide cómo navegar). */
+  onOpenDetail: (id: string) => void;
 }
 
 /**
@@ -21,7 +23,7 @@ export interface IncidentItemProps {
  * - Escritorio (lg): no hay gesto táctil, así que las acciones se muestran como botones visibles.
  * El componente no modifica datos: avisa al padre con callbacks (flujo unidireccional).
  */
-const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onToggleStatus, onDelete }) => {
+const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onToggleStatus, onDelete, onOpenDetail }) => {
   const isResolved = incident.status === 'resuelta';
 
   return (
@@ -57,7 +59,18 @@ const IncidentItem: React.FC<IncidentItemProps> = ({ incident, onToggleStatus, o
           >
             {incident.title}
           </h3>
-          <p className="mt-1 flex-1 text-sm">{incident.description}</p>
+          {/* line-clamp: la tarjeta muestra un resumen; la descripción completa está en la ficha */}
+          <p className="mt-1 line-clamp-3 flex-1 text-sm">{incident.description}</p>
+
+          {/* Enlace a la ficha técnica: botón nativo, accesible con teclado (Tab + Enter) */}
+          <button
+            type="button"
+            onClick={() => onOpenDetail(incident.id)}
+            aria-label={`Ver ficha técnica de ${incident.id}`}
+            className="mt-2 self-start border-b-[3px] border-brut-ink text-xs font-bold uppercase transition-colors duration-150 hover:bg-brut-yellow focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-brut-blue"
+          >
+            Ver ficha →
+          </button>
 
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t-[3px] border-brut-ink pt-3">
             <span className="text-xs font-bold uppercase">

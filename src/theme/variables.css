@@ -72,6 +72,14 @@ ion-item-sliding {
   height: 100%;
 }
 
+/* Botón "Volver" de la ficha: mismo lenguaje que la cabecera */
+.brut-back {
+  --color: #ffe14d;
+  --color-hover: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .brut-fab {
   --background: #ffe14d;
   --background-activated: #000000;

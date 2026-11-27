@@ -3,6 +3,7 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
+import IncidentDetail from './pages/IncidentDetail';
 
 /* Estilos base obligatorios de Ionic */
 import '@ionic/react/css/core.css';
@@ -31,6 +32,10 @@ const App: React.FC = () => (
       <IonRouterOutlet>
         <Route exact path="/home">
           <Home />
+        </Route>
+        {/* Ficha técnica: :id es un parámetro de ruta que IncidentDetail lee con useParams */}
+        <Route exact path="/incident/:id">
+          <IncidentDetail />
         </Route>
         <Route exact path="/">
           <Redirect to="/home" />
