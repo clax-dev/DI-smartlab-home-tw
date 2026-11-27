@@ -2,107 +2,262 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Memoria · SmartLab Home RWD</title>
+<title>Memoria · SmartLab Monitor · Guillermo Prat Astillero</title>
 <style>
-  @page { size: A4; margin: 16mm 15mm; }
+  @page { size: A4; margin: 15mm 14mm; }
   * { box-sizing: border-box; }
-  body { font-family: "Segoe UI", system-ui, sans-serif; color: #0f172a; font-size: 10.5pt; line-height: 1.45; margin: 0; }
-  h1 { font-size: 22pt; margin: 0 0 4px; color: #1d4ed8; }
-  h2 { break-after: avoid; font-size: 13pt; margin: 18px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #dbeafe; color: #1e3a8a; }
-  h3 { font-size: 11pt; margin: 10px 0 4px; }
+  body { font-family: "Segoe UI", system-ui, sans-serif; color: #0f172a; font-size: 10.2pt; line-height: 1.45; margin: 0; }
+  h1 { font-size: 24pt; margin: 0 0 6px; color: #000; letter-spacing: -0.5px; }
+  h2 { break-after: avoid; font-size: 13.5pt; margin: 20px 0 6px; padding: 4px 8px; background: #000; color: #ffe14d; }
+  h3 { break-after: avoid; font-size: 11pt; margin: 12px 0 4px; border-bottom: 2px solid #000; padding-bottom: 2px; }
   p { margin: 4px 0 8px; }
-  code { font-family: Consolas, monospace; font-size: 9pt; background: #f1f5f9; padding: 1px 4px; border-radius: 3px; }
-  pre { font-family: Consolas, monospace; font-size: 8.5pt; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 8px 10px; margin: 6px 0; white-space: pre; }
-  table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 9.5pt; }
-  th, td { border: 1px solid #cbd5e1; padding: 5px 7px; text-align: left; vertical-align: top; }
-  th { background: #eff6ff; }
-  .meta { color: #475569; margin-bottom: 14px; }
-  .box { border: 1px solid #bfdbfe; background: #eff6ff; border-radius: 8px; padding: 8px 12px; margin: 8px 0; }
-  .links td:first-child { width: 28%; font-weight: 600; }
-  .shots { break-inside: avoid; display: flex; gap: 10px; align-items: flex-start; justify-content: center; }
+  a { color: #1d4ed8; }
+  code { font-family: Consolas, monospace; font-size: 8.8pt; background: #f1f5f9; padding: 1px 4px; border-radius: 2px; }
+  pre { font-family: Consolas, monospace; font-size: 8.2pt; background: #f8fafc; border: 1px solid #cbd5e1; padding: 7px 9px; margin: 6px 0; white-space: pre-wrap; word-break: break-word; }
+  table { width: 100%; border-collapse: collapse; margin: 6px 0 10px; font-size: 9.2pt; }
+  tr { break-inside: avoid; }
+  th, td { border: 1px solid #94a3b8; padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background: #ffe14d; }
+  .ok { color: #15803d; font-weight: 700; white-space: nowrap; }
+  .cover { border: 4px solid #000; box-shadow: 8px 8px 0 #000; padding: 18px 20px; margin: 4px 8px 22px 0; background: #fffbea; }
+  .cover .sub { font-size: 11pt; margin-bottom: 12px; }
+  .cover table td:first-child { width: 26%; font-weight: 700; background: #fff; }
+  .cover table td { background: #fff; }
+  .box { border: 2px solid #000; background: #f4f1ea; padding: 8px 12px; margin: 8px 0; break-inside: avoid; }
+  .quote { border-left: 5px solid #000; background: #f8fafc; padding: 6px 12px; margin: 6px 0; }
+  .shots { break-inside: avoid; display: flex; gap: 10px; align-items: flex-start; justify-content: center; flex-wrap: wrap; }
   .shots figure { margin: 0; text-align: center; }
-  .shots img { border: 1px solid #cbd5e1; border-radius: 6px; display: block; }
-  figcaption { font-size: 8.5pt; color: #475569; margin-top: 3px; }
+  .shots img { border: 2px solid #000; display: block; }
+  figcaption { font-size: 8.3pt; color: #334155; margin-top: 3px; }
   .page-break { break-before: page; }
-  ul { margin: 4px 0 8px; padding-left: 18px; }
+  ul, ol { margin: 4px 0 8px; padding-left: 18px; }
   li { margin: 2px 0; }
+  .file { break-inside: auto; }
+  .file h4 { font-family: Consolas, monospace; font-size: 9.5pt; margin: 12px 0 2px; padding: 2px 6px; background: #ffe14d; border: 1px solid #000; break-after: avoid; }
+  .file pre { font-size: 7.4pt; line-height: 1.32; margin-top: 0; }
+  .toc li { margin: 1px 0; }
 </style>
 </head>
 <body>
 
-<h1>SmartLab Monitor: Home responsive</h1>
-<div class="meta">
-  Desarrollo de Interfaces (0488) · 2.º DAM · Práctica: <strong>Proyecto React + componente Home + Tailwind CSS + RWD + despliegue en Vercel · brutalismo, interacciones y layout con vh</strong>
+<!-- ======================= PORTADA ======================= -->
+<div class="cover">
+  <h1>SmartLab Monitor</h1>
+  <div class="sub"><strong>Home RWD con React + Ionic + Tailwind CSS</strong> · brutalismo, interacciones y layout con <code>vh</code> · persistencia local y ficha de detalle</div>
+  <table>
+    <tr><td>Alumno</td><td><strong>Guillermo Prat Astillero</strong></td></tr>
+    <tr><td>Módulo</td><td>Desarrollo de Interfaces (0488) · 2.º CFGS DAM · Profesor: Carmelo</td></tr>
+    <tr><td>Entrega</td><td>Segunda oportunidad · 27 de noviembre de 2026</td></tr>
+    <tr><td>Despliegue (Vercel)</td><td><a href="https://smartlab-home-tw.vercel.app/home">https://smartlab-home-tw.vercel.app/home</a></td></tr>
+    <tr><td>Repositorio</td><td><a href="https://github.com/clax-dev/DI-smartlab-home-tw">https://github.com/clax-dev/DI-smartlab-home-tw</a></td></tr>
+    <tr><td>Docker (local)</td><td><code>docker build -t smartlab-ionic-tw:1.0 .</code> → <code>docker run -d -p 8080:80 smartlab-ionic-tw:1.0</code> → <code>http://localhost:8080</code></td></tr>
+    <tr><td>Stack</td><td>React 18 · TypeScript 5 · Ionic React 8 · Tailwind CSS 3.4 · Vite 5 · Capacitor 6 · Docker + Nginx</td></tr>
+  </table>
 </div>
 
-<table class="links">
-  <tr><td>Despliegue (Vercel)</td><td><a href="https://smartlab-home-tw.vercel.app">https://smartlab-home-tw.vercel.app</a></td></tr>
-  <tr><td>Repositorio</td><td><code>https://github.com/clax-dev/DI-smartlab-home-tw</code></td></tr>
-  <tr><td>Stack</td><td>React 18 · TypeScript · Ionic React 8 · Tailwind CSS 3.4 · Vite 5</td></tr>
-</table>
+<h3>Índice</h3>
+<ol class="toc">
+  <li>Enunciado de la tarea</li>
+  <li>Tabla de cumplimiento (requisito → evidencia)</li>
+  <li>Arquitectura y flujo de datos</li>
+  <li>Estrategia responsive (Desktop · Tablet · Mobile)</li>
+  <li>Brutalismo, interacciones y layout con vh</li>
+  <li>Mejoras de la guía (1 a 5)</li>
+  <li>Verificación (pruebas automatizadas)</li>
+  <li>Despliegue: Vercel y Docker</li>
+  <li>Capturas</li>
+  <li>Anexo: código fuente completo</li>
+</ol>
 
-<h2>1. Objetivo</h2>
-<p>Crear un proyecto nuevo en React cuya pantalla principal (<code>Home</code>) esté maquetada con clases utilitarias de Tailwind CSS. El Home debe adaptarse a tres tipos de dispositivo (móvil, tablet y escritorio) y publicarse en Vercel, aplicando <strong>estilo brutalista, interacciones y un layout basado en <code>vh</code></strong>. Se parte de la guía técnica de la asignatura (<em>SmartLab Incident Manager</em>), que ya plantea Ionic React + Tailwind sobre Vite. A esa base se añade un diseño responsive de tres niveles y se divide el Home en componentes.</p>
+<!-- ======================= 1. ENUNCIADO ======================= -->
+<h2 class="page-break">1. Enunciado de la tarea</h2>
 
-<h2>2. Arquitectura y flujo de datos</h2>
-<pre>main.tsx ─► App.tsx (IonApp + router: "/" → "/home")
-              └─► pages/Home.tsx  ← dueño del estado: lista, búsqueda, filtro, modal, toast
-                    ├─ KpiCard           props: label, value, icon, tone
-                    ├─ IncidentItem      props: incident  · callbacks: onToggleStatus, onDelete
-                    └─ NewIncidentModal  estado local del formulario · callback: onCreate</pre>
-<p><strong>Flujo unidireccional:</strong> los datos bajan a los hijos como <em>props</em> y los eventos suben como <em>callbacks</em>. Solo <code>Home</code> modifica la lista. Las métricas y el listado filtrado se calculan a partir del estado con <code>useMemo</code>, así que no se guardan duplicados.</p>
+<h3>1.1 Pautas de la práctica</h3>
+<div class="quote">
+  <p><strong>Contexto (tipos de interfaz):</strong> Escritorio (Java AWT/Swing · JavaFX · FXML) · Python · App nativa mobile (Android Kotlin · iOS) · Web (HTML · RWD · híbridas). Interfaz visual: prototipado de pantallas (Adobe XD · Figma); estilos CSS / Sass (Bootstrap / Materialize · Tailwind).</p>
+  <p><strong>Instrucciones:</strong> Crear un proyecto nuevo en React · Componente <em>Home</em> · Aplicar Tailwind.</p>
+  <p><strong>Entrega:</strong> Home en RWD (Desktop · Mobile · Tablet) · Deploy en Vercel.</p>
+  <p><strong>Revisión:</strong> comprobar que se ha aplicado <strong>brutalismo, interacciones y layout con vh</strong>.</p>
+</div>
+
+<h3>1.2 Guía técnica de referencia: «Arquitectura híbrida con Ionic React, TypeScript y Tailwind CSS»</h3>
+<p>Resultados de aprendizaje que trabaja: <strong>RA 1</strong> (CE 1.a/1.b, flujo unidireccional y componentes desacoplados) · <strong>RA 2</strong> (CE 2.b/2.c/2.d, JSX + Tailwind + variables CSS) · <strong>RA 3</strong> (CE 3.a/3.c/3.e, gestos, modales, buscador y eventos tipados) · <strong>RA 4</strong> (CE 4.b–4.e, mobile-first, áreas táctiles de 44 px, contraste WCAG 2.2 y <code>aria-label</code>) · <strong>RA 7</strong> (CE 7.a/7.e, empaquetado con Capacitor y despliegue con Docker + Nginx).</p>
+<p>Pasos base de la guía: (1) crear el proyecto con Ionic CLI y Vite · (2) instalar Tailwind 3.4 con configuración ESM · (3) directivas Tailwind y variables de tema · (4) modelo de dominio en TypeScript · (5) <code>Home.tsx</code> con contador, <em>pull-to-refresh</em>, buscador, filtro, KPIs, lista deslizable, modal, FAB y toast · (6) ejecución con <code>npm run dev</code> y contenedor Docker.</p>
+
+<h3>1.3 Mejoras exigidas (sección 3 de la guía)</h3>
+<div class="quote">
+  <p><em>Partiendo de la arquitectura base desarrollada en esta guía, el alumno deberá extender la aplicación SmartLab Monitor cumpliendo los siguientes requisitos técnicos:</em></p>
+  <ol>
+    <li><strong>Modularización de componentes (RA 1 / CE 1.b, RA 3 / CE 3.a):</strong> extraer la tarjeta KPI y la fila de incidencia (<code>IonItemSliding</code>) de <code>Home.tsx</code> hacia <code>src/components/KpiCard.tsx</code> y <code>src/components/IncidentItem.tsx</code>, definiendo sus interfaces de Props en TypeScript sin recurrir a <code>any</code>.</li>
+    <li><strong>Persistencia de datos y sincronización (RA 3 / CE 3.c):</strong> implementar persistencia en el cliente mediante <code>localStorage</code> (o <code>@capacitor/preferences</code>) sincronizada a través de un <em>Custom Hook</em> (<code>useIncidentsStorage.ts</code>), de modo que las altas, cambios de estado y eliminaciones sobrevivan a la recarga completa de la aplicación.</li>
+    <li><strong>Vista de detalle y navegación Ionic (RA 2 / CE 2.b, RA 3 / CE 3.e):</strong> añadir una segunda ruta (<code>/incident/:id</code>) registrada en <code>IonRouterOutlet</code> con botón de retorno nativo (<code>&lt;IonBackButton defaultHref="/home"/&gt;</code>) que muestre la ficha técnica completa de la incidencia seleccionada y permita editar su descripción.</li>
+    <li><strong>Usabilidad, accesibilidad y validación responsiva (RA 4 / CE 4.c, 4.d, 4.e):</strong> verificar en Chrome DevTools (360×800 y 1280×800) la ausencia de desbordamiento horizontal, el contraste WCAG AA (≥ 4,5:1) y la correcta operabilidad mediante teclado en el modal de creación.</li>
+    <li><strong>Despliegue y entrega (RA 7 / CE 7.a):</strong> entregar el repositorio Git con el código fuente limpio y el Dockerfile funcional verificado en puerto local.</li>
+  </ol>
+</div>
+
+<!-- ======================= 2. CUMPLIMIENTO ======================= -->
+<h2>2. Tabla de cumplimiento</h2>
 <table>
-  <tr><th>Decisión</th><th>Motivo</th><th>Alternativa descartada</th></tr>
-  <tr><td>Ionic React + Tailwind</td><td>Es el stack de la guía. Ionic aporta los controles móviles (deslizar, FAB, modal) y Tailwind el layout responsive.</td><td>React + Vite sin Ionic: más simple, pero habría que programar a mano los gestos táctiles.</td></tr>
-  <tr><td>Home dividido en 3 componentes</td><td>Cada pieza tiene una sola responsabilidad. Cambiar el diseño de la tarjeta solo afecta a <code>IncidentItem</code>.</td><td>Un único <code>Home.tsx</code> de 450 líneas, como en la guía.</td></tr>
-  <tr><td>Estado del formulario dentro del modal</td><td>El tecleo no vuelve a pintar todo el Home, y el padre solo recibe datos ya validados.</td><td>Mantener los 4 <code>useState</code> del formulario en Home.</td></tr>
-  <tr><td>Botones y buscador nativos con Tailwind</td><td>El brutalismo exige controlar borde, sombra y foco; en un <code>&lt;button&gt;</code> nativo Tailwind llega a todo.</td><td><code>IonButton</code>/<code>IonSearchbar</code>: su aspecto vive en el Shadow DOM y solo se cambia con variables.</td></tr>
-  <tr><td>Personalización del Shadow DOM mediante variables CSS</td><td>Las clases de Tailwind no penetran en el Shadow DOM de Ionic.</td><td>Usar <code>className="--padding-start:16px"</code> como en la guía: no es una clase válida y el navegador lo ignora.</td></tr>
+  <tr><th style="width:26%">Requisito</th><th>Cómo se cumple</th><th style="width:24%">Dónde verlo</th><th style="width:7%">Estado</th></tr>
+  <tr><td>Proyecto nuevo en React</td><td>React 18 + TypeScript sobre Vite 5, con Ionic React 8 como en la guía</td><td><code>package.json</code>, <code>src/main.tsx</code></td><td class="ok">✔</td></tr>
+  <tr><td>Componente Home</td><td><code>Home.tsx</code> como contenedor que coordina la vista y delega en 3 componentes hijos</td><td><code>src/pages/Home.tsx</code></td><td class="ok">✔</td></tr>
+  <tr><td>Aplicar Tailwind</td><td>Tailwind 3.4 con configuración ESM, tema propio (paleta, sombras, fuentes, animaciones) y <code>@apply</code></td><td><code>tailwind.config.js</code>, <code>variables.css</code></td><td class="ok">✔</td></tr>
+  <tr><td>RWD Desktop · Tablet · Mobile</td><td>Mobile-first con <code>md:</code> y <code>lg:</code>; tres layouts distintos (§4)</td><td>§4 y capturas §9</td><td class="ok">✔</td></tr>
+  <tr><td>Deploy en Vercel</td><td><code>vercel.json</code> con <em>rewrite</em> SPA; despliegue automático desde GitHub</td><td>URL de la portada · §8</td><td class="ok">✔</td></tr>
+  <tr><td>Brutalismo</td><td>Bordes negros gruesos, sombras duras, colores planos, tipografía enorme, sin redondeos</td><td>§5</td><td class="ok">✔</td></tr>
+  <tr><td>Interacciones</td><td>Botones físicos, KPIs-filtro, marquesina, animaciones, swipe, modal, toast, navegación a ficha</td><td>§5</td><td class="ok">✔</td></tr>
+  <tr><td>Layout con vh</td><td>Hero, KPIs, panel, listado, ficha, textarea y modal dimensionados con <code>vh</code></td><td>§5</td><td class="ok">✔</td></tr>
+  <tr><td>Mejora 1 · Modularización</td><td><code>KpiCard</code>, <code>IncidentItem</code> y además <code>NewIncidentModal</code>, con Props tipadas y sin <code>any</code></td><td><code>src/components/</code> · §6.1</td><td class="ok">✔</td></tr>
+  <tr><td>Mejora 2 · Persistencia</td><td>Custom hook <code>useIncidentsStorage</code> sobre <code>localStorage</code>; altas, estados, borrados y ediciones sobreviven a la recarga</td><td><code>src/hooks/</code> · §6.2 · §7</td><td class="ok">✔</td></tr>
+  <tr><td>Mejora 3 · Ficha de detalle</td><td>Ruta <code>/incident/:id</code> en <code>IonRouterOutlet</code>, <code>IonBackButton defaultHref="/home"</code>, descripción editable</td><td><code>src/pages/IncidentDetail.tsx</code> · §6.3</td><td class="ok">✔</td></tr>
+  <tr><td>Mejora 4 · Accesibilidad y RWD</td><td>Sin scroll horizontal en 360×800, 820×1180 y 1280×800; contraste ≥ 6,9:1; modal 100 % operable con teclado</td><td>§6.4 · §7</td><td class="ok">✔</td></tr>
+  <tr><td>Mejora 5 · Repo + Docker</td><td>Repositorio Git limpio (<code>.gitignore</code>, sin <code>node_modules</code> ni <code>dist</code>); imagen construida y verificada en <code>localhost:8080</code></td><td><code>Dockerfile</code>, <code>nginx.conf</code> · §8</td><td class="ok">✔</td></tr>
 </table>
 
-<h2>3. Estrategia responsive (mobile-first)</h2>
-<p>Las clases de Tailwind sin prefijo definen el diseño móvil. Los prefijos <code>md:</code> (≥ 768 px) y <code>lg:</code> (≥ 1024 px) añaden cambios para pantallas más anchas. La pegatina «Vista Mobile / Tablet / Desktop» del hero muestra qué layout está activo.</p>
+<!-- ======================= 3. ARQUITECTURA ======================= -->
+<h2>3. Arquitectura y flujo de datos</h2>
+<pre>index.html ─► main.tsx ─► App.tsx  (IonApp + IonReactRouter + IonRouterOutlet)
+                              ├─ "/"              → Redirect a "/home"
+                              ├─ "/home"          → pages/Home.tsx           (contenedor de la vista)
+                              │                       ├─ components/KpiCard.tsx          (presentación)
+                              │                       ├─ components/IncidentItem.tsx     (presentación + gestos)
+                              │                       └─ components/NewIncidentModal.tsx (formulario, estado local)
+                              └─ "/incident/:id"  → pages/IncidentDetail.tsx (ficha técnica, edición)
+
+          hooks/useIncidentsStorage.ts ◄── usado por Home y por IncidentDetail
+                 │  lista de incidencias (una sola fuente de verdad)
+                 └─► localStorage["smartlab.incidents.v1"]   (semilla: data/initialIncidents.ts)
+          types/incident.ts       modelo de dominio tipado
+          theme/variables.css     @tailwind + tokens Ionic + personalización del Shadow DOM</pre>
+
+<p><strong>Flujo unidireccional:</strong> los datos bajan a los hijos como <em>props</em> y los eventos suben como <em>callbacks</em> (<code>onToggleStatus</code>, <code>onDelete</code>, <code>onOpenDetail</code>, <code>onCreate</code>). Ningún componente de presentación modifica la lista: solo el hook <code>useIncidentsStorage</code> la escribe, y lo hace a través de acciones con nombre (<code>addIncident</code>, <code>toggleStatus</code>, <code>deleteIncident</code>, <code>updateDescription</code>).</p>
+
 <table>
-  <tr><th>Vista</th><th>Ancho</th><th>Cambios de layout</th><th>Clases clave</th></tr>
-  <tr><td><strong>Mobile</strong></td><td>&lt; 768 px</td><td>1 columna · KPIs 2×2 · botón flotante · acciones con gesto de deslizar · modal a pantalla completa</td><td><code>grid-cols-2</code>, <code>IonFab</code></td></tr>
-  <tr><td><strong>Tablet</strong></td><td>768–1023 px</td><td>KPIs en una fila de 4 · tarjetas en 2 columnas · título del hero más grande · modal centrado de 640 px</td><td><code>md:grid-cols-4</code>, <code>md:grid-cols-2</code>, <code>sm:text-6xl</code></td></tr>
-  <tr><td><strong>Desktop</strong></td><td>≥ 1024 px</td><td>Panel lateral fijo de 360 px + rejilla de tarjetas · sin FAB (botón en el panel) · botón de borrar visible, porque con ratón no hay gesto de deslizar</td><td><code>lg:grid-cols-[360px_1fr]</code>, <code>lg:sticky</code>, <code>lg:hidden</code></td></tr>
+  <tr><th style="width:22%">Decisión</th><th>Motivo</th><th style="width:32%">Alternativa descartada</th></tr>
+  <tr><td>Ionic React + Tailwind</td><td>Es el stack de la guía: Ionic aporta controles móviles (deslizar, FAB, modal, back button) y Tailwind el layout responsive.</td><td>React + Vite sin Ionic: habría que programar a mano gestos y navegación móvil.</td></tr>
+  <tr><td>Home dividido en 3 componentes</td><td>Responsabilidad única: cambiar el diseño de la tarjeta solo toca <code>IncidentItem</code>.</td><td>Un único <code>Home.tsx</code> de ~450 líneas, como en la guía.</td></tr>
+  <tr><td>Estado de la lista en un hook con almacén externo</td><td><code>IonRouterOutlet</code> mantiene Home montado al ir a la ficha; un único almacén evita dos copias desincronizadas.</td><td><code>useState</code> + <code>useEffect</code> en cada página: la edición en la ficha no se vería al volver sin recargar.</td></tr>
+  <tr><td>Estado del formulario dentro del modal</td><td>El tecleo no repinta todo el Home; el padre solo recibe datos validados.</td><td>Mantener los 4 <code>useState</code> del formulario en Home.</td></tr>
+  <tr><td>Botones y buscador nativos con Tailwind</td><td>El brutalismo exige controlar borde, sombra y foco; en un <code>&lt;button&gt;</code> nativo Tailwind llega a todo.</td><td><code>IonButton</code>/<code>IonSearchbar</code>: su aspecto vive en el Shadow DOM.</td></tr>
+  <tr><td>Shadow DOM personalizado con variables CSS</td><td>Las clases de Tailwind no penetran en el Shadow DOM de Ionic.</td><td><code>className="--padding-start:16px"</code> como en la guía: no es una clase válida y el navegador la ignora.</td></tr>
 </table>
-<div class="box"><strong>Verificación:</strong> se emularon dispositivos con Playwright + Chrome a 360×800, 820×1180 y 1280×800. En los tres tamaños el ancho del contenido coincide con el de la ventana (<code>scrollWidth = clientWidth</code>), por lo que no hay scroll horizontal. Las áreas táctiles miden al menos 44 px y los botones de solo icono llevan <code>aria-label</code>.</div>
 
-<h2>4. Brutalismo, interacciones y layout con vh</h2>
+<!-- ======================= 4. RWD ======================= -->
+<h2>4. Estrategia responsive (mobile-first)</h2>
+<p>Las clases sin prefijo definen el diseño móvil; <code>md:</code> (≥ 768 px) y <code>lg:</code> (≥ 1024 px) añaden cambios para pantallas más anchas. La pegatina «Vista Mobile / Tablet / Desktop» del hero indica qué layout está activo.</p>
 <table>
-  <tr><th>Requisito</th><th>Qué se ha hecho</th><th>Clases / código clave</th></tr>
-  <tr><td><strong>Brutalismo</strong></td><td>Bordes negros de 3–4 px, sombras duras sin desenfoque, colores planos saturados, títulos gigantes en mayúsculas (Archivo Black), sin esquinas redondeadas, fondo de puntos y trama rayada en las resueltas.</td><td><code>border-[3px] border-brut-ink</code>, <code>shadow-brut</code> (6px 6px 0 #000), paleta <code>brut-*</code> y <code>font-display</code> en <code>tailwind.config.js</code></td></tr>
-  <tr><td><strong>Interacciones</strong></td><td>Botón "físico" que se levanta con el ratón y se hunde al pulsar · KPIs clicables que filtran el listado (el activo se ve invertido y hundido) · tarjetas que se levantan · animación al crear · marquesina con contadores en vivo que se pausa al pasar el ratón · buscador resaltado al enfocar · gesto de deslizar en móvil.</td><td><code>.brut-press</code> con <code>@apply hover:-translate-* active:translate-x-[6px] active:shadow-none</code>, <code>aria-pressed</code>, <code>animate-pop</code>, <code>animate-marquee</code></td></tr>
-  <tr><td><strong>Layout con vh</strong></td><td>Hero de altura relativa a la ventana · KPIs con alto mínimo · panel lateral de escritorio que nunca supera la ventana · listado con alto mínimo para que no "salte" al filtrar · modal limitado al 85 % de la ventana.</td><td><code>min-h-[38vh] md:min-h-[32vh] lg:min-h-[34vh]</code>, <code>min-h-[12vh]</code>, <code>lg:max-h-[calc(100vh-7rem)]</code>, <code>lg:min-h-[60vh]</code>, <code>--height: min(500px, 85vh)</code></td></tr>
+  <tr><th>Vista</th><th>Ancho</th><th>Home</th><th>Ficha de detalle</th><th>Clases clave</th></tr>
+  <tr><td><strong>Mobile</strong></td><td>&lt; 768 px</td><td>1 columna · KPIs 2×2 · FAB para crear · acciones con gesto de deslizar · modal a pantalla completa</td><td>Datos en rejilla 2×2 y descripción debajo</td><td><code>grid-cols-2</code>, <code>IonFab</code></td></tr>
+  <tr><td><strong>Tablet</strong></td><td>768–1023 px</td><td>KPIs en fila de 4 · tarjetas en 2 columnas · hero más grande · modal centrado de 640 px</td><td>Igual que móvil con título mayor</td><td><code>md:grid-cols-4</code>, <code>md:grid-cols-2</code>, <code>sm:text-6xl</code></td></tr>
+  <tr><td><strong>Desktop</strong></td><td>≥ 1024 px</td><td>Panel lateral fijo de 360 px + rejilla de tarjetas · sin FAB · botón de borrar visible (no hay gesto con ratón)</td><td>2 columnas: datos (300 px) + editor</td><td><code>lg:grid-cols-[360px_1fr]</code>, <code>lg:sticky</code>, <code>lg:hidden</code></td></tr>
 </table>
-<p>Accesibilidad de las interacciones: <code>hoverOnlyWhenSupported</code> evita el hover "pegado" en táctiles, las animaciones se desactivan con <code>motion-reduce:</code> y el foco de teclado se marca con un contorno de 4 px.</p>
 
-<h2>5. Despliegue en Vercel</h2>
+<!-- ======================= 5. BRUTALISMO ======================= -->
+<h2>5. Brutalismo, interacciones y layout con vh</h2>
+<table>
+  <tr><th style="width:14%">Requisito</th><th>Qué se ha hecho</th><th style="width:36%">Clases / código clave</th></tr>
+  <tr><td><strong>Brutalismo</strong></td><td>Bordes negros de 3–4 px, sombras duras sin desenfoque, colores planos saturados, títulos gigantes en mayúsculas (Archivo Black) y texto en Space Mono, ninguna esquina redondeada, fondo de puntos y trama rayada en las incidencias resueltas.</td><td><code>border-[3px] border-brut-ink</code>, <code>shadow-brut</code> (6px 6px 0 #000), paleta <code>brut-*</code>, <code>font-display</code>; en Ionic <code>--border-radius: 0</code></td></tr>
+  <tr><td><strong>Interacciones</strong></td><td>Botón «físico» que se levanta con el ratón y se hunde al pulsar · KPIs clicables que filtran el listado (el activo se ve invertido y hundido) · tarjetas que se levantan · animación al crear · marquesina con contadores en vivo que se pausa al pasar el ratón · buscador resaltado al enfocar · gesto de deslizar en móvil · <em>pull-to-refresh</em> · enlace «Ver ficha →» · guardado con indicador «Cambios sin guardar / Guardado».</td><td><code>.brut-press</code> con <code>@apply hover:-translate-* active:translate-x-[6px] active:shadow-none</code>, <code>aria-pressed</code>, <code>animate-pop</code>, <code>animate-marquee</code>, <code>IonItemSliding</code>, <code>IonRefresher</code></td></tr>
+  <tr><td><strong>Layout con vh</strong></td><td>Hero proporcional a la ventana · KPIs con alto mínimo · panel lateral que nunca supera la ventana · listado con alto mínimo para que no «salte» al filtrar · estado vacío · cabecera y editor de la ficha · modal limitado al 85 % de la ventana.</td><td><code>min-h-[38vh] md:min-h-[32vh] lg:min-h-[34vh]</code>, <code>min-h-[12vh]</code>, <code>lg:max-h-[calc(100vh-7rem)]</code>, <code>lg:min-h-[60vh]</code>, <code>min-h-[30vh]</code>, <code>min-h-[26vh]</code>, <code>--height: min(500px, 85vh)</code></td></tr>
+</table>
+<p>Accesibilidad de las interacciones: <code>hoverOnlyWhenSupported</code> evita el hover «pegado» en pantallas táctiles, las animaciones se desactivan con <code>motion-reduce:</code> y el foco de teclado se marca con un contorno de 4 px.</p>
+
+<!-- ======================= 6. MEJORAS ======================= -->
+<h2>6. Mejoras de la guía</h2>
+
+<h3>6.1 Modularización de componentes</h3>
+<p><code>KpiCard</code> (props <code>label, value, icon, tone, active, onSelect</code>) e <code>IncidentItem</code> (props <code>incident, onToggleStatus, onDelete, onOpenDetail</code>) son componentes de presentación con interfaces exportadas y sin <code>any</code>. Los tonos de color se tipan como unión (<code>'neutral' | 'warning' | 'danger' | 'success'</code>) y se mapean a clases completas, porque Tailwind no detecta clases construidas concatenando texto. Además se extrajo <code>NewIncidentModal</code>, que guarda su propio estado de formulario.</p>
+
+<h3>6.2 Persistencia con el hook <code>useIncidentsStorage</code></h3>
 <ul>
-  <li><code>vercel.json</code> declara el framework <em>Vite</em>, el comando <code>npm run build</code> y la carpeta <code>dist</code>.</li>
-  <li>La regla <em>rewrite</em> <code>/(.*) → /index.html</code> hace que recargar <code>/home</code> no dé un 404. La ruta la resuelve React en el navegador (es una SPA) y no existe como fichero en el servidor.</li>
-  <li>Al importar el repo de GitHub en Vercel, cada <code>git push</code> a <code>main</code> vuelve a desplegar la app automáticamente.</li>
+  <li><strong>Qué guarda:</strong> la lista completa de incidencias como JSON en <code>localStorage["smartlab.incidents.v1"]</code>. La primera vez (o si los datos guardados están corruptos) usa los datos semilla.</li>
+  <li><strong>Cómo sincroniza:</strong> la lista vive en un único almacén de módulo. Cada componente se suscribe con <code>useSyncExternalStore</code>; cada acción escribe en <code>localStorage</code> y avisa a los suscriptores, así Home y la ficha ven siempre la misma lista. El evento <code>storage</code> sincroniza también otras pestañas abiertas.</li>
+  <li><strong>Qué puede fallar y cómo se cubre:</strong> JSON inválido o con formato antiguo → se valida cada elemento (<code>isIncident</code>) y se vuelve a la semilla; almacenamiento bloqueado o lleno → <code>try/catch</code> y la app sigue funcionando en memoria.</li>
+  <li><strong>Ids sin colisiones:</strong> los nuevos ids se calculan como el mayor <code>INC-NNN</code> existente + 1 (la guía usaba un número aleatorio que podía repetirse).</li>
 </ul>
 
-<h2>6. Ejecución local</h2>
+<h3>6.3 Ficha de detalle <code>/incident/:id</code></h3>
+<ul>
+  <li>Ruta registrada en <code>IonRouterOutlet</code> (<code>App.tsx</code>); el id llega por la URL con <code>useParams</code>.</li>
+  <li>Se entra desde «Ver ficha →» de cada tarjeta: <code>IncidentItem</code> avisa con <code>onOpenDetail</code> y Home navega con <code>useIonRouter().push(...)</code> (transición nativa de Ionic).</li>
+  <li><code>&lt;IonBackButton defaultHref="/home" /&gt;</code> vuelve con el historial; si se abre la ficha directamente por URL (sin historial), <code>defaultHref</code> lleva a <code>/home</code>.</li>
+  <li>Muestra id, título, ubicación, prioridad, estado y hora; permite cambiar el estado y <strong>editar la descripción</strong>. El borrador es estado local y solo se guarda al pulsar «Guardar descripción» (el botón se desactiva si no hay cambios y no admite descripción vacía).</li>
+  <li>Si el id no existe (incidencia borrada o URL escrita a mano) se muestra un aviso en lugar de una pantalla rota.</li>
+</ul>
+
+<h3>6.4 Usabilidad, accesibilidad y validación responsiva</h3>
+<ul>
+  <li><strong>Desbordamiento:</strong> <code>scrollWidth = clientWidth</code> en Home y ficha a 360×800, 820×1180 y 1280×800 (§7).</li>
+  <li><strong>Contraste WCAG AA:</strong> todo el texto es negro sobre colores claros saturados o amarillo sobre negro; la combinación más baja es 6,94:1 (negro sobre rojo #FF5C5C), por encima del 4,5:1 exigido.</li>
+  <li><strong>Teclado en el modal:</strong> se llega a «Nueva incidencia» con <kbd>Tab</kbd>, <kbd>Enter</kbd> lo abre, el foco queda atrapado dentro del modal, <kbd>Tab</kbd> recorre los campos, <kbd>Enter</kbd> envía el formulario y <kbd>Esc</kbd> lo cierra.</li>
+  <li>Áreas táctiles de al menos 44 px (<code>min-h-11</code>), <code>aria-label</code> en los botones de solo icono, <code>aria-pressed</code> en los KPIs-filtro y <code>aria-live</code> en contadores y estado de guardado.</li>
+</ul>
+
+<h3>6.5 Repositorio y Docker</h3>
+<p>El repositorio excluye <code>node_modules</code>, <code>dist</code> y <code>.vercel</code>. El <code>Dockerfile</code> es multietapa: <code>node:22-alpine</code> compila con <code>npm ci</code> (instalación exacta según <code>package-lock.json</code>) y <code>nginx:1.27-alpine</code> sirve <code>dist/</code>. <code>nginx.conf</code> añade <code>try_files … /index.html</code> para que las rutas de la SPA (<code>/home</code>, <code>/incident/:id</code>) no den 404 al recargar.</p>
+
+<!-- ======================= 7. VERIFICACIÓN ======================= -->
+<h2>7. Verificación</h2>
+<p>Pruebas automatizadas con Playwright + Google Chrome contra la <strong>imagen Docker</strong> en <code>http://localhost:8080</code> (el mismo build de producción que se publica en Vercel). Resultado: <strong>27 de 27 comprobaciones superadas</strong>.</p>
+<table>
+  <tr><th>Comprobación</th><th style="width:30%">Resultado</th></tr>
+  <tr><td>Home y ficha sin scroll horizontal a 360×800 · 820×1180 · 1280×800 (6 pruebas)</td><td class="ok">✔ 360=360 · 820=820 · 1280=1280</td></tr>
+  <tr><td>Teclado: Tab alcanza «Nueva incidencia» · Enter abre el modal · el foco queda dentro · Enter envía y crea · Esc cierra</td><td class="ok">✔ 5/5</td></tr>
+  <tr><td>Persistencia tras recarga: alta · cambio de estado · eliminación</td><td class="ok">✔ 3/3</td></tr>
+  <tr><td>Ficha: URL <code>/incident/INC-101</code> · back button vuelve a <code>/home</code> · Home muestra la descripción editada · la edición persiste tras recargar</td><td class="ok">✔ 4/4</td></tr>
+  <tr><td>Ficha abierta por URL directa + «Volver» → <code>/home</code> (defaultHref) · id inexistente muestra aviso</td><td class="ok">✔ 2/2</td></tr>
+  <tr><td>Contraste: negro sobre amarillo 16,13 · rojo 6,94 · verde 15,04 · azul 11,37 · papel 18,62 · blanco 21,00 · amarillo sobre negro 16,13</td><td class="ok">✔ 7/7 (≥ 4,5:1)</td></tr>
+  <tr><td>Compilación TypeScript estricta + build de Vite (<code>npm run build</code>)</td><td class="ok">✔ sin errores</td></tr>
+  <tr><td>Contenedor Docker: <code>GET /</code> y <code>GET /incident/INC-101</code> en el puerto 8080</td><td class="ok">✔ 200 · 200</td></tr>
+</table>
+
+<!-- ======================= 8. DESPLIEGUE ======================= -->
+<h2>8. Despliegue</h2>
+<h3>8.1 Vercel</h3>
+<ul>
+  <li><code>vercel.json</code> declara el framework <em>Vite</em>, el comando <code>npm run build</code> y la carpeta <code>dist</code>.</li>
+  <li>La regla <em>rewrite</em> <code>/(.*) → /index.html</code> hace que recargar <code>/home</code> o <code>/incident/INC-101</code> no dé 404: la ruta la resuelve React en el navegador (SPA) y no existe como fichero en el servidor.</li>
+  <li>El repositorio está conectado a Vercel: cada <code>git push</code> a <code>main</code> vuelve a desplegar automáticamente.</li>
+</ul>
+<h3>8.2 Docker (verificado en puerto local)</h3>
+<pre>docker build -t smartlab-ionic-tw:1.0 .
+docker run -d -p 8080:80 --name smartlab-container smartlab-ionic-tw:1.0
+# → http://localhost:8080/home  y  http://localhost:8080/incident/INC-101  responden 200</pre>
+<h3>8.3 Ejecución local</h3>
 <pre>npm install
 npm run dev       # http://localhost:5173
-npm run build     # build de producción en dist/ (lo mismo que ejecuta Vercel)</pre>
+npm run build     # build de producción en dist/ (lo mismo que ejecuta Vercel y Docker)
+npm run preview   # sirve dist/ en http://localhost:4173</pre>
 
-
-<h2>7. Capturas</h2>
+<!-- ======================= 9. CAPTURAS ======================= -->
+<h2 class="page-break">9. Capturas</h2>
+<h3>Home en los tres dispositivos</h3>
 <div class="shots">
-  <figure><img src="capturas/mobile.png" style="width:140px"><figcaption>Mobile · hero 38vh</figcaption></figure>
-  <figure><img src="capturas/mobile-scroll.png" style="width:140px"><figcaption>Mobile · KPIs y tarjetas</figcaption></figure>
-  <figure><img src="capturas/tablet.png" style="width:206px"><figcaption>Tablet · 820×1180</figcaption></figure>
-  <figure><img src="capturas/mobile-modal.png" style="width:140px"><figcaption>Modal en móvil</figcaption></figure>
+  <figure><img src="capturas/mobile.png" style="width:150px"><figcaption>Mobile 360×800 · hero 38vh</figcaption></figure>
+  <figure><img src="capturas/mobile-scroll.png" style="width:150px"><figcaption>Mobile · KPIs, tarjetas, FAB</figcaption></figure>
+  <figure><img src="capturas/mobile-modal.png" style="width:150px"><figcaption>Mobile · modal</figcaption></figure>
+  <figure><img src="capturas/tablet.png" style="width:220px"><figcaption>Tablet 820×1180</figcaption></figure>
 </div>
 <div class="shots" style="margin-top:12px">
-  <figure><img src="capturas/desktop.png" style="width:330px"><figcaption>Desktop · 1280×800</figcaption></figure>
-  <figure><img src="capturas/desktop-filtro.png" style="width:330px"><figcaption>Interacción: KPI «Críticas» pulsado filtra el listado</figcaption></figure>
+  <figure><img src="capturas/desktop.png" style="width:340px"><figcaption>Desktop 1280×800</figcaption></figure>
+  <figure><img src="capturas/desktop-filtro.png" style="width:340px"><figcaption>Interacción: KPI «Críticas» pulsado filtra el listado</figcaption></figure>
 </div>
+<h3>Mejoras: teclado, ficha de detalle y persistencia</h3>
+<div class="shots">
+  <figure><img src="capturas/desktop-modal-teclado.png" style="width:340px"><figcaption>Modal rellenado solo con teclado (Tab + escribir)</figcaption></figure>
+  <figure><img src="capturas/detail-editando.png" style="width:340px"><figcaption>Ficha /incident/INC-101 editando la descripción</figcaption></figure>
+</div>
+<div class="shots" style="margin-top:12px">
+  <figure><img src="capturas/detail-mobile.png" style="width:150px"><figcaption>Ficha · Mobile</figcaption></figure>
+  <figure><img src="capturas/detail-tablet.png" style="width:220px"><figcaption>Ficha · Tablet</figcaption></figure>
+  <figure><img src="capturas/desktop-persistencia.png" style="width:300px"><figcaption>Tras recargar: alta, estado, borrado y edición conservados</figcaption></figure>
+</div>
+
+<!-- ======================= 10. ANEXO ======================= -->
+<h2 class="page-break">10. Anexo: código fuente completo</h2>
+<p>Todos los archivos del proyecto escritos o configurados para esta práctica (se excluyen <code>node_modules</code>, <code>dist</code> y <code>package-lock.json</code>, que se generan automáticamente).</p>
+<!--ANEXO_CODIGO-->
 
 </body>
 </html>
