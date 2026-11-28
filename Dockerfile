@@ -1,8 +1,9 @@
-# Etapa 1: Compilación de la aplicación Ionic React + Tailwind CSS
+﻿# Etapa 1: Compilación de la aplicación Ionic React + Tailwind CSS
 FROM node:22-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+# npm ci instala exactamente lo de package-lock.json (build reproducible)
+RUN npm ci
 COPY . .
 RUN npm run build
 

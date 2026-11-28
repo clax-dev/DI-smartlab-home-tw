@@ -12,11 +12,12 @@ Enunciado: *crear un proyecto nuevo en React con un componente Home, aplicarle T
 ## 1. Arquitectura
 
 ```
-index.html ─► main.tsx ─► App.tsx (IonApp + IonReactRouter: "/" → "/home")
+index.html ─► main.tsx ─► App.tsx (IonApp + IonReactRouter: "/" → "/home", "/incident/:id" → pages/IncidentDetail.tsx)
                                 └─► pages/Home.tsx            ← contenedor: dueño del estado
                                       ├─ components/KpiCard.tsx         (presentación)
                                       ├─ components/IncidentItem.tsx    (presentación + gestos)
                                       └─ components/NewIncidentModal.tsx (formulario con estado local)
+                                    hooks/useIncidentsStorage.ts (lista persistida en localStorage, compartida por Home y la ficha)
                                     data/initialIncidents.ts  (datos semilla)
                                     types/incident.ts         (modelo de dominio tipado)
                                     theme/variables.css       (@tailwind + tokens Ionic + Shadow DOM)
@@ -80,6 +81,18 @@ Accesibilidad de las interacciones: `future.hoverOnlyWhenSupported` evita el "ho
 | Listado (desktop) | `lg:min-h-[60vh]` | el layout no "salta" al filtrar y quedar pocas tarjetas |
 | Estado vacío | `min-h-[30vh]` | el aviso mantiene presencia visual |
 | Modal (tablet/desktop) | `--height: min(500px, 85vh)` | nunca se sale de la ventana en pantallas bajas |
+
+## 3 bis. Mejoras de la guía (segunda entrega)
+
+| Mejora | Implementación |
+|---|---|
+| 1. Modularización | `KpiCard`, `IncidentItem` y `NewIncidentModal` con Props tipadas, sin `any` |
+| 2. Persistencia | `src/hooks/useIncidentsStorage.ts`: almacén único con `useSyncExternalStore` + `localStorage` (altas, estados, borrados y ediciones sobreviven a la recarga; sincroniza pestañas) |
+| 3. Ficha de detalle | `src/pages/IncidentDetail.tsx` en `/incident/:id`, `<IonBackButton defaultHref="/home" />`, descripción editable |
+| 4. Accesibilidad | sin scroll horizontal a 360/820/1280 px, contraste ≥ 6,94:1, modal operable con teclado (Tab, Enter, Esc) |
+| 5. Docker | `Dockerfile` multietapa con `npm ci` verificado en `http://localhost:8080` |
+
+Memoria completa (enunciado, cumplimiento, verificación y código): `docs/Memoria_SmartLab_Home_RWD.pdf`, regenerable con `.\docs\generar-pdf.ps1`.
 
 ## 4. Tailwind dentro de Ionic: la frontera del Shadow DOM
 
